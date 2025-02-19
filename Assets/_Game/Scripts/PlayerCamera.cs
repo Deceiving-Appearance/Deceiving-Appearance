@@ -47,7 +47,11 @@ namespace LRS
             #endif
             _rb = GetComponent<Rigidbody>();
             if (Camera.main != null)
+            {
                 _cam ??= Camera.main.transform;
+                Camera.main.clearFlags = CameraClearFlags.SolidColor;
+                Camera.main.backgroundColor = Color.black;
+            }
         }
 
         // Update is called once per frame

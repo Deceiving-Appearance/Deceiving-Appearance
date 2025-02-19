@@ -1,8 +1,4 @@
-﻿/*
- * Author: Leonhard Robin Schnaitl
- * GitHub: https://github.com/leonhardrobin
-*/ 
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using System.Linq;
 
