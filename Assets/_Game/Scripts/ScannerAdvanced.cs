@@ -1,8 +1,3 @@
-/*
- * Author: Leonhard Robin Schnaitl
- * GitHub: https://github.com/leonhardrobin
-*/
-
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -35,7 +30,7 @@ namespace LRS
         [SerializeField] private float radius = 10f;
         [SerializeField] private float maxRadius = 10f;
         [SerializeField] private float minRadius = 1f;
-        [SerializeField] private int pointsPerScan = 100;
+        [SerializeField] private int pointsPerScan = 50;
         [SerializeField] private float range = 10f;
 
         [SerializeField] private int resolution = 100;
