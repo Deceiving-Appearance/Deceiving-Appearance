@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Pink
+  - Orange
+  - Red
+  - Yellow
+  - Green
+  - Enemy
   layers:
   - Default
   - TransparentFX
