@@ -33,7 +33,7 @@ namespace LRS
         [SerializeField] private int pointsPerScan = 50;
         [SerializeField] private float range = 10f;
 
-        [SerializeField] private int resolution = 100;
+        [SerializeField] private int resolution = 50;
         
         // safety check -> don't call NewVisualEffect more than once
         private bool _createNewVFX;
