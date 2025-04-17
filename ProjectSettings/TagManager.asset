@@ -9,6 +9,7 @@ TagManager:
   - Red
   - Yellow
   - Green
+  - Alien
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - UI
   - InvisibleGeometry
   - PointReject
-  - 
-  - 
+  - MagInvisibleGeometry
+  - WhatIsGround
   - 
   - 
   - 
