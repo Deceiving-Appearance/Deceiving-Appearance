@@ -11,18 +11,23 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject cameraScanner;
     [SerializeField] private GameObject cameraScannerPlaceholderValid;
     [SerializeField] private GameObject cameraScannerPlaceholderInvalid;
+    [SerializeField] private GameObject LidarGrenadePrefab;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private LayerMask placementLayerMask;
     [SerializeField] private float maxBuildDistance = 5f;
 
+    [SerializeField] int lidarGrenadeAmount = 3;
+
     private InputAction _build;
     private InputAction _place;
+    private InputAction _throw;
     private bool _buildMode = false;
 
     void Start()
     {
         _build = playerInput.actions["Build"];
         _place = playerInput.actions["Fire"];
+        _throw = playerInput.actions["Throw"];
 
         _build.performed += ToggleBuildMode;
         _place.performed += PlaceCameraScanner;
@@ -117,6 +122,16 @@ public class PlayerManager : MonoBehaviour
             cameraScannerPlaceholderInvalid.SetActive(false);
         }
     }
+
+    // void ThrowLidarGrenade()
+    // {
+    //     if (lidarGrenadeAmount > 0)
+    //     {
+    //         // TODO - Instance grenade and use force to throw.
+    //         GameObject grenade = Instantiate(LidarGrenadePrefab, threwPoint.position, throwPoint.rotation);
+    //         Rigidbody rb = grenade.GetComponent<Rigidbody>();
+    //     }
+    // }
 
     void OnDestroy()
     {
