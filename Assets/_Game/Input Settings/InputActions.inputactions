@@ -36,7 +36,7 @@
                     "name": "Interact",
                     "type": "Button",
                     "id": "9a10a975-43e0-415f-b479-474527ee7886",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -85,15 +85,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "Build",
-                    "type": "Button",
-                    "id": "1ff5159a-a1d4-4cbf-9406-959d2217333a",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -380,17 +371,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Scroll",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "baf3011d-cb04-4bfa-b253-6ef14b2400bc",
-                    "path": "<Keyboard>/b",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Build",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

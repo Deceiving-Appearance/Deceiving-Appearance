@@ -1,206 +1,122 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.VFX;
-using Random = UnityEngine.Random;
 
 namespace LRS
 {
-    [RequireComponent(typeof(LineRenderer))]
     public class ScannerGrenade : MonoBehaviour
     {
-        private InputAction _fire;
-        private InputAction _changeRadius;
-        private LineRenderer _lineRenderer;
-
-        [SerializeField] private List<PointsData> pointsData = new();
-
-        private const string REJECT_LAYER_NAME = "PointReject";
-        //private const string PLAYER_TAG = "Player";
-        private const string TEXTURE_NAME = "PositionsTexture";
-        private const string RESOLUTION_PARAMETER_NAME = "Resolution";
-        //private const string PARTICLE_AMOUNT_PARAMETER_NAME = "ParticleAmount";
-        //private const string PARTICLES_PER_SCAN_PARAMETER_NAME = "ParticlesPerScan";
-
-        public bool autoScan = true;
-
-        [SerializeField] private bool reuseOldParticles = false;
-        [SerializeField] private LayerMask layerMask;
-        [SerializeField] private PlayerInput playerInput;
+        [Header("VFX Settings")]
         [SerializeField] private GameObject vfxContainer;
-        [SerializeField] private Transform castPoint;
-        [SerializeField] private float radius = 10f;
-        [SerializeField] private float maxRadius = 10f;
-        [SerializeField] private float minRadius = 1f;
-        [SerializeField] private int pointsPerScan = 50;
-        [SerializeField] private float range = 10f;
+        [SerializeField] private VisualEffect vfxPrefab;
 
+        [Header("Explosion Settings")]
+        [SerializeField] private float explosionRadius = 10f;
+        [SerializeField] private int pointsPerExplosion = 500;
+        [SerializeField] private LayerMask layerMask;
+        [SerializeField] private float fadeDuration = 1.5f;
+
+        [Header("Texture Settings")]
         [SerializeField] private int resolution = 100;
-        
-        // safety check -> don't call NewVisualEffect more than once
-        private bool _createNewVFX;
+
+        private bool _createNewVFX = true;
+        private List<Vector3> positions = new List<Vector3>();
+        private VisualEffect currentVFX;
+        private Texture2D texture;
+        private Color[] positionsAsColors;
 
         private void Start()
         {
-            // Get InputAction from PlayerInput
-            _fire = playerInput.actions["Fire"];
-            _changeRadius = playerInput.actions["Scroll"];
-            _lineRenderer = GetComponent<LineRenderer>();
-            _lineRenderer.enabled = false;
-
-            pointsData.ForEach(data =>
-            {
-                data.ClearData();
-                _createNewVFX = true;
-                data.currentVisualEffect = NewVisualEffect(data.prefab, out data.texture, out data.positionsAsColors);
-                ApplyPositions(data.positionsList, data.currentVisualEffect, data.texture, data.positionsAsColors);
-            });
-        }
-        
-        private void FixedUpdate()
-        {
-            Scan();
-            ChangeRadius();
+            Explode();
         }
 
-        private void ChangeRadius()
+        public void Explode()
         {
-            if (_changeRadius.triggered)
+            positions.Clear();
+
+            if (_createNewVFX)
             {
-                radius = Mathf.Clamp(radius + _changeRadius.ReadValue<float>() * Time.deltaTime, minRadius, maxRadius);
+                currentVFX = NewVisualEffect(out texture, out positionsAsColors);
             }
+
+            for (int i = 0; i < pointsPerExplosion; i++)
+            {
+              
+                Vector3 randomDirection = Random.onUnitSphere;
+                Vector3 targetPoint = transform.position + randomDirection * explosionRadius;
+
+      
+                Vector3 direction = (targetPoint - transform.position).normalized;
+
+                if (Physics.Raycast(transform.position, direction, out RaycastHit hit, explosionRadius, layerMask))
+                {
+                    if (hit.collider.CompareTag("PointReject")) continue;
+
+                  
+                    positions.Add(hit.point);
+
+                 
+                    Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
+                    if (rb != null && rb.velocity.magnitude > 0.1f)
+                    {
+                        StartCoroutine(FadePoint(hit.point));
+                    }
+                }
+            }
+
+            ApplyPositions(positions, currentVFX, texture, positionsAsColors);
         }
 
-        private void ApplyPositions(List<Vector3> positionsList, VisualEffect currentVFX, Texture2D texture, Color[] positions)
+        private IEnumerator FadePoint(Vector3 point)
         {
-            // create array from list
-            Vector3[] pos = positionsList.ToArray();
-            
-            // cache position for offset
-            Vector3 vfxPos = currentVFX.transform.position;
-            
-            // cache transform position
-            Vector3 transformPos = transform.position;
-            
-            // cache some more stuff for faster access
+            float time = 0f;
+            while (time < fadeDuration)
+            {
+                time += Time.deltaTime;
+                yield return null;
+            }
+            positions.Remove(point);
+            ApplyPositions(positions, currentVFX, texture, positionsAsColors);
+        }
+
+        private void ApplyPositions(List<Vector3> positionsList, VisualEffect vfx, Texture2D texture, Color[] positions)
+        {
             int loopLength = texture.width * texture.height;
-            int posListLen = pos.Length;
+            int posListLen = positionsList.Count;
 
             for (int i = 0; i < loopLength; i++)
             {
-                Color data;
+                Color data = (i < posListLen)
+                    ? new Color(positionsList[i].x, positionsList[i].y, positionsList[i].z, 1)
+                    : new Color(0, 0, 0, 0);
 
-                if (i < posListLen - 1)
-                {
-                    data = new Color(pos[i].x - vfxPos.x, pos[i].y - vfxPos.y, pos[i].z - vfxPos.z, 1);
-                }
-                else
-                {
-                    data = new Color(0, 0, 0, 0);
-                }
                 positions[i] = data;
             }
-            
-            // apply to texture
+
             texture.SetPixels(positions);
             texture.Apply();
-            
-            // apply to VFX
-            currentVFX.SetTexture(TEXTURE_NAME, texture);
-            currentVFX.Reinit();
+            vfx.SetTexture("PositionsTexture", texture);
+            vfx.Reinit();
         }
 
-        private VisualEffect NewVisualEffect(VisualEffect visualEffect, out Texture2D texture, out Color[] positions) // this is fucking performance heavy help
+        private VisualEffect NewVisualEffect(out Texture2D texture, out Color[] positions)
         {
             if (!_createNewVFX)
             {
                 texture = null;
-                positions = new Color[] {};
+                positions = new Color[] { };
                 return null;
             }
-            
-            // create new VFX
-            VisualEffect vfx = Instantiate(visualEffect, transform.position, Quaternion.identity, vfxContainer.transform);
-            vfx.SetUInt(RESOLUTION_PARAMETER_NAME, (uint)resolution);
-            
-            // create texture
+
+            VisualEffect newVFX = Instantiate(vfxPrefab, transform.position, Quaternion.identity, vfxContainer.transform);
+            newVFX.SetUInt("Resolution", (uint)resolution);
+
             texture = new Texture2D(resolution, resolution, TextureFormat.RGBAFloat, false);
-            
-            // create color array for positions
             positions = new Color[resolution * resolution];
 
             _createNewVFX = false;
-
-            return vfx;
-        }
-        
-        private void Scan()
-        {
-            // only call if button is pressed
-            if (autoScan)
-            {
-                for (int i = 0; i < pointsPerScan; i++)
-                {
-                    // generate random point
-                    Vector3 randomPoint = Random.insideUnitSphere * radius;
-                    randomPoint += castPoint.position;
-
-                    // calculate direction to random point
-                    Vector3 dir = (randomPoint - transform.position).normalized;
-
-                    // cast ray
-                    if (Physics.Raycast(transform.position, dir, out RaycastHit hit, range, layerMask))
-                    {
-                        if (hit.collider.CompareTag(REJECT_LAYER_NAME)) continue;
-                        // On Hit
-                        // check which color was hit
-                        int resolution2 = resolution * resolution;
-                        pointsData.ForEach(data =>
-                        {
-                            data.includedTags.ForEach(tag =>
-                            {
-                                if (hit.collider.CompareTag(tag))
-                                {
-                                    if (data.positionsList.Count < resolution2)
-                                    {
-                                        data.positionsList.Add(hit.point);
-                                    }
-                                    else if (reuseOldParticles)
-                                    {
-                                        data.positionsList.RemoveAt(0);
-                                        data.positionsList.Add(hit.point);
-                                    }
-                                    else
-                                    {
-                                        _createNewVFX = true;
-                                        data.currentVisualEffect = NewVisualEffect(data.prefab, out data.texture, out data.positionsAsColors);
-                                        data.positionsList.Clear();
-                                    }
-                                }
-                            });
-                        });
-                        _lineRenderer.enabled = true;
-                        _lineRenderer.SetPositions(new[]
-                        {
-                            transform.position,
-                            hit.point
-                        });
-                    } // raycast
-                    else
-                    {
-                        Debug.DrawRay(transform.position, dir * range, Color.red);
-                    }
-                } // for loop
-                // Apply positions to VFX
-                pointsData.ForEach(data =>
-                {
-                    ApplyPositions(data.positionsList, data.currentVisualEffect, data.texture, data.positionsAsColors);
-                });
-            } // button press
-            else
-            {
-                _lineRenderer.enabled = false;
-            }
+            return newVFX;
         }
     }
 }
