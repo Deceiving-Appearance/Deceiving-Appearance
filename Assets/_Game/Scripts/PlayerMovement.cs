@@ -168,6 +168,8 @@ namespace LRS
         
         private void GetMovementDirection()
         {
+            if (pauseMovement) return;
+
             #if ENABLE_INPUT_SYSTEM
             // get the movement input axis
             float horizontalMovement = _move.ReadValue<Vector2>().x;

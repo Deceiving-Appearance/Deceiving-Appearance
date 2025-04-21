@@ -54,6 +54,9 @@ VisualEffect:
       - m_Value: 0.036
         m_Name: Size
         m_Overridden: 1
+      - m_Value: 50
+        m_Name: MaxDistanceFromRef
+        m_Overridden: 1
     m_Vector2f:
       m_Array: []
     m_Vector3f:
@@ -61,7 +64,10 @@ VisualEffect:
     m_Vector4f:
       m_Array: []
     m_Uint:
-      m_Array: []
+      m_Array:
+      - m_Value: 16384
+        m_Name: Capacity
+        m_Overridden: 0
     m_Int:
       m_Array: []
     m_Matrix4x4f:
