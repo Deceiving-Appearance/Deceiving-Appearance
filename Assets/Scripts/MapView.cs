@@ -20,15 +20,18 @@ namespace LRS
         [SerializeField] private GameObject mapLidarPointObj;
         [SerializeField] private Vector3 mapOffset;
         [SerializeField] private float mapMoveSpeed;
+        [SerializeField] private float scrollSpeed = 1f;
 
         private InputAction _map;
         private InputAction _move;
+        private InputAction _mapScroll;
         private Vector3 _moveDirection;
 
         void Start()
         {
             _map = playerInput.actions["Map"];
             _move = playerInput.actions["Move"];
+            _mapScroll = playerInput.actions["Scroll"];
 
             _map.performed += ToggleMapMode;
         }
@@ -38,6 +41,7 @@ namespace LRS
             if (_mapMode)
             {
                 GetMovementDirection();
+                MapZoom();
             }
         }
 
@@ -93,16 +97,19 @@ namespace LRS
             
             _moveDirection = (right * horizontalMovement + forward * verticalMovement).normalized;
             mapCamera.transform.position += _moveDirection * mapMoveSpeed * Time.deltaTime;
-            Debug.Log(_moveDirection);
+            // Debug.Log(_moveDirection);
         }
 
-        // private void OrbitCameraControl()
-        // {
-        //     float mouseX = _look.ReadValue<Vector2>().x;
-        //     float mouseY = _look.ReadValue<Vector2>().y;
-    
-        //     _yRotation += GetMouseInput().x * _sensitivity * Time.deltaTime;
+        private void MapZoom()
+        {
+            float scrollValue = _mapScroll.ReadValue<float>();
             
-        // }
+            if (scrollValue == 0)
+            {
+                return;
+            }
+            
+            mapCamera.transform.position += mapCamera.transform.forward * scrollValue * scrollSpeed * Time.deltaTime;
+        }
     }
 }

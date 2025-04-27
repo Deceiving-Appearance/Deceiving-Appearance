@@ -26,7 +26,6 @@ namespace LRS
 
         [SerializeField] private bool reuseOldParticles = false;
         [SerializeField] private LayerMask layerMask;
-        [SerializeField] private PlayerInput playerInput;
         [SerializeField] private GameObject vfxContainer;
         [SerializeField] private Transform castPoint;
         [SerializeField] private float radius = 10f;
@@ -42,9 +41,6 @@ namespace LRS
 
         private void Start()
         {
-            // Get InputAction from PlayerInput
-            _fire = playerInput.actions["Fire"];
-            _changeRadius = playerInput.actions["Scroll"];
             _lineRenderer = GetComponent<LineRenderer>();
             _lineRenderer.enabled = false;
 
@@ -60,7 +56,7 @@ namespace LRS
         private void FixedUpdate()
         {
             Scan();
-            ChangeRadius();
+            // ChangeRadius();
         }
 
         private void ChangeRadius()

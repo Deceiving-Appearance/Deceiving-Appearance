@@ -10,6 +10,7 @@ public class PointRenderer : MonoBehaviour
     private const string POSITIONS_TEXTURE_NAME = "Positions";
     private const string CAPACITY_PARAM_NAME = "Capacity";
     private const string REFERENCE_POS_PARAM_NAME = "ReferencePosition";
+    private const string REFERENCE_ENEMY_POS_PARAM_NAME = "EnemyReferencePosition";
 
     [SerializeField] private VisualEffect effectPrefab;
     [SerializeField] private Transform effectContainer;
@@ -61,7 +62,21 @@ public class PointRenderer : MonoBehaviour
     {
         foreach(VisualEffect effect in effects)
         {
-            effect.SetVector3(REFERENCE_POS_PARAM_NAME, position);
+            if (effect.HasVector3(REFERENCE_POS_PARAM_NAME))
+            {
+                effect.SetVector3(REFERENCE_POS_PARAM_NAME, position);
+            }
+        }
+    }
+
+    public void SetReferenceEnemyPosition(Vector3 position)
+    {
+        foreach(VisualEffect effect in effects)
+        {
+            if (effect.HasVector3(REFERENCE_ENEMY_POS_PARAM_NAME))
+            {
+                effect.SetVector3(REFERENCE_ENEMY_POS_PARAM_NAME, position);
+            }
         }
     }
 
