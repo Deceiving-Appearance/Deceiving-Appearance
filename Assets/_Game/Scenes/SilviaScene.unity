@@ -5873,6 +5873,34 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &492738912 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8725892774889107068, guid: 7b3d4f41843bb954799824c153062ee0,
+    type: 3}
+  m_PrefabInstance: {fileID: 7343203139466756198}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &492738913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 492738912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e6a6fc884372f343b7bd613459f4d71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1151996859}
+  fieldOfView: 60
+  moveCooldown: 2
+  minDistanceToPlayer: 2
+  maxDistanceToPlayer: 15
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 64
+  wallCheckDistance: 2
+  positionTries: 20
 --- !u!1 &518795837
 GameObject:
   m_ObjectHideFlags: 0
@@ -24435,6 +24463,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 1860888520225523652, guid: 7b3d4f41843bb954799824c153062ee0,
+        type: 3}
+      propertyPath: m_Speed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1868821203044826279, guid: 7b3d4f41843bb954799824c153062ee0,
         type: 3}
       propertyPath: m_Layer
@@ -24475,6 +24508,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1151996859}
+    - target: {fileID: 2248774923532555356, guid: 7b3d4f41843bb954799824c153062ee0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2248774923532555356, guid: 7b3d4f41843bb954799824c153062ee0,
         type: 3}
       propertyPath: whatIsGround.m_Bits
@@ -24793,7 +24831,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8725892774889107068, guid: 7b3d4f41843bb954799824c153062ee0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 492738913}
   m_SourcePrefab: {fileID: 100100000, guid: 7b3d4f41843bb954799824c153062ee0, type: 3}
 --- !u!1001 &7775978128733926627
 PrefabInstance:
