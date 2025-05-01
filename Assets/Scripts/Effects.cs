@@ -1,45 +1,89 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Effects : MonoBehaviour
 {
     public Material screenDamageMat;
-    private Coroutine screenDamageTask;
+    public TextMeshProUGUI deathMessageText;
 
-    private void Update()
+    private Coroutine fadeCoroutine;
+    private float currentRadius = 1f; // Start with no redness
+    private bool isDead = false;
+
+    [Header("Settings")]
+    public float radiusDecreasePerHit = 0.6f;
+    public float fadeStepAmount = 0.5f;     // How much to heal per step
+    public float fadeDelay = 1f;             // Wait time between fade steps
+    public float damageCooldown = 1f;
+
+    private float lastDamageTime = -999f;
+
+    void Start()
     {
-        if(Input.GetKeyDown(KeyCode.T))
-            ScreenDamageEffect(Random.Range(0.1f, 1));
+        currentRadius = 1f;
+        screenDamageMat.SetFloat("_Vignette_radius", currentRadius);
+
+        if (deathMessageText != null)
+            deathMessageText.enabled = false;
     }
 
-    void ScreenDamageEffect(float intensity)
+    public void OnPlayerHit()
     {
-        if(screenDamageTask != null)
-            StopCoroutine(screenDamageTask);
-        screenDamageTask = StartCoroutine(screenDamage(intensity));
-    }
+        if (isDead) return;
 
-    private IEnumerator screenDamage(float intensity)
-    {
-        var targetRadius = Remap(intensity, 0, 1, 0.4f, -0.15f);
-        float curRadius = 1f;
-        for(float t = 0; curRadius != targetRadius; t += Time.deltaTime)
+        if (Time.time - lastDamageTime < damageCooldown)
+            return;
+
+        lastDamageTime = Time.time;
+
+        currentRadius -= radiusDecreasePerHit;
+        currentRadius = Mathf.Clamp(currentRadius, -1f, 1f);
+        screenDamageMat.SetFloat("_Vignette_radius", currentRadius);
+        Debug.Log("Current Radius: " + currentRadius);
+
+        // Restart fade loop from the beginning
+        if (fadeCoroutine != null)
+            StopCoroutine(fadeCoroutine);
+
+        fadeCoroutine = StartCoroutine(FadeBackToSafeRepeated());
+
+        if (currentRadius <= -0.8f)
         {
-            curRadius = Mathf.Lerp(1, targetRadius, t);
-            screenDamageMat.SetFloat("_Vignette_radius", curRadius);
-            yield return null;
-        }
-        for(float t = 0; curRadius < 1; t += Time.deltaTime)
-        {
-            curRadius = Mathf.Lerp(targetRadius, 1, t);
-            screenDamageMat.SetFloat("_Vignette_radius", curRadius);
-            yield return null;
+            Die();
         }
     }
 
-    private float Remap(float value, float fromMin, float fromMax, float toMin, float toMax)
+    private IEnumerator FadeBackToSafeRepeated()
     {
-        return Mathf.Lerp(toMin, toMax, Mathf.InverseLerp(fromMin, fromMax, value));
+        while (currentRadius < 1f && !isDead)
+        {
+            // Wait before each fade step
+            yield return new WaitForSeconds(fadeDelay);
+
+            // Then apply fade step
+            currentRadius += fadeStepAmount;
+            currentRadius = Mathf.Clamp(currentRadius, -1f, 1f);
+            screenDamageMat.SetFloat("_Vignette_radius", currentRadius);
+
+            Debug.Log("Faded up to: " + currentRadius);
+        }
+
+        fadeCoroutine = null;
+    }
+
+    private void Die()
+    {
+        isDead = true;
+        currentRadius = -0.8f;
+        screenDamageMat.SetFloat("_Vignette_radius", currentRadius);
+
+        if (deathMessageText != null)
+        {
+            deathMessageText.text = "You Died";
+            deathMessageText.enabled = true;
+        }
+
+        Debug.Log("Player died.");
     }
 }
