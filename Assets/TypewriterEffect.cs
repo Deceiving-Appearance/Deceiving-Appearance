@@ -7,7 +7,7 @@ public class TypewriterEffect : MonoBehaviour
 {
     public TextMeshProUGUI textDisplay;
     [TextArea(3, 10)] public string fullText;
-    public float letterDelay = 0.04f;
+    public float letterDelay = 0.06f;
 
     private bool isTyping = false;
     private Coroutine typingCoroutine;
