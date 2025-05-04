@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class PlayerDetector: MonoBehaviour {
     [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private MeshCollider meshCollider;
+    [SerializeField] private CapsuleCollider capsuleCollider;
+    [SerializeField] private Camera playerCamera;
 
+public Camera PlayerCamera => playerCamera;
     /// <summary>
     /// Returns a list of PlayerControllers that are within the passed radius
     /// </summary>
@@ -25,9 +27,9 @@ public class PlayerDetector: MonoBehaviour {
     public bool IsAnyoneLookingAtMe(List<PlayerManager> players) {
         for(int i = 0; i < players.Count; i++) {
             if(players[i].TryGetComponent(out PlayerManager possibleTarget)) {
-                //if(IsGameObjectInView(possibleTarget.playerCamera)) {
-                    //return true;
-                //}
+                if(IsGameObjectInView(possibleTarget.playerCamera)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -37,7 +39,7 @@ public class PlayerDetector: MonoBehaviour {
     private bool IsGameObjectInView(Camera cam) {
         // Check if the object is within camera bounds
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(cam);
-        Bounds bounds = meshCollider.bounds;
+        Bounds bounds = capsuleCollider.bounds;
         if(!GeometryUtility.TestPlanesAABB(planes, bounds)) {
             return false;
         }

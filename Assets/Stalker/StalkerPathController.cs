@@ -22,6 +22,14 @@ public class StalkerPathController : MonoBehaviour
         return point;
     }
 
+    private Vector3 GetFurthestPointInOppositeDirection(Transform origin, int distance)
+    {
+        Vector3 oppositeDirection = -origin.forward;
+        Vector3 furthestPoint = origin.position + (oppositeDirection * distance);
+        furthestPoint.y = 0;
+        return furthestPoint;
+    }
+
     public void SetRandomDestination(int radius)
     {
         Vector3 randomDestination = PickRandomPoint(radius);
@@ -37,6 +45,12 @@ public class StalkerPathController : MonoBehaviour
     {
         aiPath.destination = target;
         aiPath.SearchPath();
+    }
+
+    public void SetFurthestDestination(int radius)
+    {
+        Vector3 furthestDestination = GetFurthestPointInOppositeDirection(transform, radius);
+        SetDestination(furthestDestination);
     }
 
     public void SetMoveSpeed(float speed)

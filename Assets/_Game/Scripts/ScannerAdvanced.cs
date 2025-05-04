@@ -150,6 +150,14 @@ namespace LRS
                     if (Physics.Raycast(transform.position, dir, out RaycastHit hit, range, layerMask))
                     {
                         if (hit.collider.CompareTag(REJECT_LAYER_NAME)) continue;
+                        if (hit.collider.CompareTag("Red"))
+                        {
+                            StalkerScannerReaction reaction = hit.collider.GetComponent<StalkerScannerReaction>();
+                            if (reaction != null)
+                            {
+                                reaction.RegisterScanHit();
+                            }
+                        }
                         // On Hit
                         // check which color was hit
                         int resolution2 = resolution * resolution;

@@ -9,6 +9,8 @@ public class Stalker : MonoBehaviour
     public StalkerFSM stalkerFSM;
     public StalkerPathController pathController;
     public PlayerDetector playerDetector;
+    public AudioSource stalkerAudioSource;
+
 
     private void Awake()
     {
@@ -20,7 +22,12 @@ public class Stalker : MonoBehaviour
         stalkerFSM = new();
 
         stalkerFSM.Add(new StalkerPatrollingState(this));
+        stalkerFSM.Add(new StalkerInterestedState(this));
+        stalkerFSM.Add(new StalkerShyState(this));
+        stalkerFSM.Add(new StalkerAggressiveState(this));
+
         stalkerFSM.SetCurrentState(StalkerFSMStateType.PATROLLING);
+
     }
 
     private void Update()

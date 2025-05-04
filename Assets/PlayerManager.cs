@@ -12,7 +12,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject cameraScannerPlaceholderValid;
     [SerializeField] private GameObject cameraScannerPlaceholderInvalid;
     [SerializeField] private GameObject LidarGrenadePrefab;
-    [SerializeField] private Camera playerCamera;
+    [SerializeField] public Camera playerCamera;
     [SerializeField] private LayerMask placementLayerMask;
     [SerializeField] private float maxBuildDistance = 5f;
 
