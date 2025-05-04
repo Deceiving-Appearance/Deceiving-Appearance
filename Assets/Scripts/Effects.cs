@@ -10,6 +10,7 @@ public class Effects : MonoBehaviour
 
     public Material screenDamageMat;
     public TextMeshProUGUI deathMessageText;
+    public TextMeshProUGUI restartText;
 
     private Coroutine fadeCoroutine;
     private float currentRadius = 1f;
@@ -30,6 +31,9 @@ public class Effects : MonoBehaviour
 
         if (deathMessageText != null)
             deathMessageText.enabled = false;
+
+        if (restartText != null)
+            restartText.enabled = false;
 
         IsPlayerDead = false;
     }
@@ -95,6 +99,12 @@ public class Effects : MonoBehaviour
         {
             deathMessageText.text = "You Died";
             deathMessageText.enabled = true;
+        }
+
+        if (restartText != null)
+        {
+            restartText.text = "Press R to Play Again";
+            restartText.enabled = true;
         }
 
         PlayerInput input = FindObjectOfType<PlayerInput>();
