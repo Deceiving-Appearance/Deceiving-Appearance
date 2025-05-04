@@ -41,7 +41,7 @@ Material:
     - _Blur: 0.5
     - _Vignette_blur: 2.5
     - _Vignette_darkening: 1
-    - _Vignette_radius: -0.75
+    - _Vignette_radius: 1
     - _Vignette_softness: 1.2
     m_Colors:
     - _Tint: {r: 0.8616352, g: 0.083614714, b: 0, a: 0}
