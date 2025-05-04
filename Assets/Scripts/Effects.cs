@@ -1,20 +1,24 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class Effects : MonoBehaviour
 {
+    public static bool IsPlayerDead = false;
+
     public Material screenDamageMat;
     public TextMeshProUGUI deathMessageText;
 
     private Coroutine fadeCoroutine;
-    private float currentRadius = 1f; // Start with no redness
+    private float currentRadius = 1f;
     private bool isDead = false;
 
     [Header("Settings")]
     public float radiusDecreasePerHit = 0.6f;
-    public float fadeStepAmount = 0.5f;     // How much to heal per step
-    public float fadeDelay = 1f;             // Wait time between fade steps
+    public float fadeStepAmount = 0.5f;
+    public float fadeDelay = 1f;
     public float damageCooldown = 1f;
 
     private float lastDamageTime = -999f;
@@ -26,6 +30,16 @@ public class Effects : MonoBehaviour
 
         if (deathMessageText != null)
             deathMessageText.enabled = false;
+
+        IsPlayerDead = false;
+    }
+
+    void Update()
+    {
+        if (IsPlayerDead && Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     public void OnPlayerHit()
@@ -42,7 +56,6 @@ public class Effects : MonoBehaviour
         screenDamageMat.SetFloat("_Vignette_radius", currentRadius);
         Debug.Log("Current Radius: " + currentRadius);
 
-        // Restart fade loop from the beginning
         if (fadeCoroutine != null)
             StopCoroutine(fadeCoroutine);
 
@@ -58,10 +71,8 @@ public class Effects : MonoBehaviour
     {
         while (currentRadius < 1f && !isDead)
         {
-            // Wait before each fade step
             yield return new WaitForSeconds(fadeDelay);
 
-            // Then apply fade step
             currentRadius += fadeStepAmount;
             currentRadius = Mathf.Clamp(currentRadius, -1f, 1f);
             screenDamageMat.SetFloat("_Vignette_radius", currentRadius);
@@ -75,6 +86,8 @@ public class Effects : MonoBehaviour
     private void Die()
     {
         isDead = true;
+        IsPlayerDead = true;
+
         currentRadius = -0.8f;
         screenDamageMat.SetFloat("_Vignette_radius", currentRadius);
 
@@ -83,6 +96,9 @@ public class Effects : MonoBehaviour
             deathMessageText.text = "You Died";
             deathMessageText.enabled = true;
         }
+
+        PlayerInput input = FindObjectOfType<PlayerInput>();
+        if (input != null) input.enabled = false;
 
         Debug.Log("Player died.");
     }

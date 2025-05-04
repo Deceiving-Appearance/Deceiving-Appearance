@@ -35,6 +35,7 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {
+        if (Effects.IsPlayerDead) return;
         if (_buildMode)
         {
             UpdatePlaceholderPosition();
