@@ -2,30 +2,29 @@
 using System;
 using System.Linq;
 
-
 namespace LRS
 {
-    #if ENABLE_INPUT_SYSTEM 
+#if ENABLE_INPUT_SYSTEM
     using UnityEngine.InputSystem;
     [RequireComponent(typeof(PlayerInput))]
-    #endif
+#endif
     [RequireComponent(typeof(AudioSource))]
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
     public class PlayerMovement : MonoBehaviour
     {
         #region PUBLIC MEMBERS
-        
+
         [Serializable]
         public class MovementSettings
         {
-            #if !ENABLE_INPUT_SYSTEM
+#if !ENABLE_INPUT_SYSTEM
             public KeyCode sprintKey = KeyCode.LeftShift;
             public KeyCode jumpKey = KeyCode.Space;
             public KeyCode sneakKey = KeyCode.LeftAlt;
-            #endif
+#endif
             public float walkSpeed = 25;
-            [Range(0,2f)]
+            [Range(0, 2f)]
             public float sprintSpeedMultiplier = 1.5f;
             [Range(0, 0.99f)]
             public float sneakSpeedMultiplier = 0.5f;
@@ -46,7 +45,7 @@ namespace LRS
             public float sphereCheckRadiusMultiplier = 0.95f;
             public float groundCheckDistance = 0.03f;
 
-            [Header("Other")] 
+            [Header("Other")]
             public float crouchSmoothing = 0.1f;
         }
 
@@ -61,16 +60,27 @@ namespace LRS
             public float footstepMinSpeed = 0.01f;
             public AudioClip[] footstepSounds;
         }
-        
-        public bool pauseMovement;
+
+        public bool PauseMovement;
+
+        public bool pauseMovement
+        {
+            get { return PauseMovement; }
+            set
+            {
+                PauseMovement = value;
+
+                GetComponent<Rigidbody>().isKinematic = PauseMovement;
+            }
+        }
         public bool isSprinting { get; private set; }
         public bool isCrouching { get; private set; }
         public bool didJump { get; private set; }
 
         #endregion
-        
+
         #region PRIVTE MEMBERS
-        
+
         private class References
         {
             public Rigidbody rigidbody;
@@ -81,35 +91,35 @@ namespace LRS
         [SerializeField] private MovementSettings _movementSettings = new();
         [SerializeField] private AdvancedSettings _advancedSettings = new();
         [SerializeField] private AudioSettings _audioSettings = new();
-        
+
         // Movement Settings
-        #if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM
         private InputAction _move;
         private InputAction _sprint;
         private InputAction _jump;
         private InputAction _sneak;
-        #else
+#else
         private const string HORIZONTAL_AXIS = "Horizontal";
         private const string VERTICAL_AXIS = "Vertical";
-        #endif
-        
+#endif
+
         private Vector3 _moveDirection;
         private const float BASE_SPEED = 10f;
         private float _normalColliderHeight;
         private bool _isCrouch;
         private const string PLAYER_TAG = "Player";
-        
+
         // Audio Settings
         private float _footstepTimer;
-        private float GetCurrentStepSpeed => 
-            isCrouching ? _audioSettings.baseStepSpeed * _audioSettings.crouchSpeedMultiplier : 
-            isSprinting ? _audioSettings.baseStepSpeed * _audioSettings.sprintSpeedMultiplier : 
+        private float GetCurrentStepSpeed =>
+            isCrouching ? _audioSettings.baseStepSpeed * _audioSettings.crouchSpeedMultiplier :
+            isSprinting ? _audioSettings.baseStepSpeed * _audioSettings.sprintSpeedMultiplier :
             _audioSettings.baseStepSpeed;
 
         #endregion
-        
+
         #region UNITY MESSAGES
-        
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -118,21 +128,21 @@ namespace LRS
             _references.collider = GetComponent<CapsuleCollider>();
             _normalColliderHeight = _references.collider.height;
             _audioSettings.audioSource ??= GetComponent<AudioSource>();
-            #if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM
             PlayerInput playerInput = GetComponent<PlayerInput>();
             _move = playerInput.actions["Move"];
             _sprint = playerInput.actions["Sprint"];
             _jump = playerInput.actions["Jump"];
             _sneak = playerInput.actions["Crouch"];
-            #endif
+#endif
 
             // make physics material
             CreateNonFrictionPhysicsMaterial();
-            
+
             // handle the cursor
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            
+
             // make sure rigidbody rotations are frozen
             _references.rigidbody.freezeRotation = true;
         }
@@ -149,7 +159,7 @@ namespace LRS
         {
             Movement();
         }
-        
+
         #endregion
 
         #region PRIVATE METHODS
@@ -166,17 +176,19 @@ namespace LRS
             };
             _references.collider.material = physicsMaterial;
         }
-        
+
         private void GetMovementDirection()
         {
-            #if ENABLE_INPUT_SYSTEM
+            if (pauseMovement) return;
+
+#if ENABLE_INPUT_SYSTEM
             // get the movement input axis
             float horizontalMovement = _move.ReadValue<Vector2>().x;
             float verticalMovement = _move.ReadValue<Vector2>().y;
-            #else
+#else
             float horizontalMovement = Input.GetAxis(HORIZONTAL_AXIS);
             float verticalMovement = Input.GetAxis(VERTICAL_AXIS);
-            #endif
+#endif
             // combine into single direction
             Transform t = transform;
             _moveDirection = (horizontalMovement * t.right + verticalMovement * t.forward).normalized;
@@ -194,7 +206,7 @@ namespace LRS
             if (!CanMove(_moveDirection) && _advancedSettings.enableCapsuleCast) return;
 
             // only multiply if the sprint key is being pressed
-            #if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM
             float speedMultiplier;
             if (_sprint.IsPressed())
                 speedMultiplier = _movementSettings.sprintSpeedMultiplier;
@@ -202,7 +214,7 @@ namespace LRS
                 speedMultiplier = _movementSettings.sneakSpeedMultiplier;
             else
                 speedMultiplier = 1;
-            #else
+#else
             float speedMultiplier;
             if (Input.GetKey(_movementSettings.sprintKey))
                 speedMultiplier = _movementSettings.sprintSpeedMultiplier;
@@ -211,8 +223,8 @@ namespace LRS
             else
                 speedMultiplier = 1;
             
-            #endif
-            
+#endif
+
             // set isSprinting and isSneaking bool to give other scripts that information
             isSprinting = speedMultiplier > 1;
             isCrouching = speedMultiplier < 1;
@@ -232,7 +244,7 @@ namespace LRS
         {
             // if wanted pause the movement
             if (pauseMovement) return;
-            
+
             // make the jump available to other scripts
             // is the jump button pressed and the player is grounded
             didJump = GetJump() && IsGrounded();
@@ -248,12 +260,12 @@ namespace LRS
         {
             // if wanted pause the movement
             if (pauseMovement) return;
-            
-            #if ENABLE_INPUT_SYSTEM
+
+#if ENABLE_INPUT_SYSTEM
             if (_sneak.IsPressed())
-            #else
+#else
             if (Input.GetKeyDown(_movementSettings.sneakKey))
-            #endif
+#endif
             {
                 // reduce the size of the player collider
                 _references.collider.height =
@@ -271,7 +283,7 @@ namespace LRS
 
                     _isCrouch = true;
                 }
-                
+
             }
             else // do the opposite
             {
@@ -289,7 +301,7 @@ namespace LRS
 
                     _isCrouch = false;
                 }
-                
+
             }
         }
 
@@ -297,14 +309,14 @@ namespace LRS
         {
             if (!_audioSettings.enableAudio) return;
             if (_audioSettings.footstepSounds.Length == 0) return;
-            
+
             // only play the sound if the player is moving on the ground
             if (!IsGrounded()) return;
             if (_references.rigidbody.velocity.magnitude < _audioSettings.footstepMinSpeed) return;
 
             // start the timer
             _footstepTimer -= Time.deltaTime;
-            
+
             // if the timer is 0 or less, play the sound and reset the timer
             if (_footstepTimer <= 0)
             {
@@ -317,16 +329,16 @@ namespace LRS
 
         private bool GetJump()
         {
-            #if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM
             return _jump.WasPressedThisFrame();
-            #else
+#else
             return Input.GetKeyDown(_movementSettings.jumpKey);
-            #endif
+#endif
         }
-        
+
         #region CALCULATIONS
 
-        private bool IsGrounded()
+        public bool IsGrounded()
         {
             // calculate the bottom point of the capsule (where the radius is applied)
             float distanceToPoints = _references.collider.height / 2 - _references.collider.radius;

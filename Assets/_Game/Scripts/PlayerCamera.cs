@@ -1,7 +1,7 @@
 ﻿/*
  * Author: Leonhard Robin Schnaitl
  * GitHub: https://github.com/leonhardrobin
-*/ 
+*/
 using UnityEngine;
 
 #if ENABLE_INPUT_SYSTEM 
@@ -13,38 +13,42 @@ namespace LRS
     public class PlayerCamera : MonoBehaviour
     {
         #region PRIVATE MEMBERS
-        
+
         [SerializeField] private Transform _cam;
         [SerializeField] private float _sensitivity = 10;
         [SerializeField] private float clampAngle = 80f;
+        [SerializeField] private PlayerMovement playerMovement;
 
         private Rigidbody _rb;
         private float _xRotation;
         private float _yRotation;
-        
-        #if ENABLE_INPUT_SYSTEM 
+        private Vector3 initialCameraPos;
+
+#if ENABLE_INPUT_SYSTEM
         private InputAction _look;
-        #else
+#else
         private const string MOUSE_X_AXIS = "Mouse X";
         private const string MOUSE_Y_AXIS = "Mouse Y";
-        #endif
-        
+#endif
+
         #endregion
 
         #region PUBLIC MEMBERS
 
         public bool pauseCameraMovement;
+        public float swayAmount = 0.05f;
+        public float swaySpeed = 3f;
 
         #endregion
 
         #region UNITY MESSAGES
-        
+
         // Start is called before the first frame update
-        private  void Start()
+        private void Start()
         {
-            #if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM
             _look = GetComponent<PlayerInput>().actions["Look"];
-            #endif
+#endif
             _rb = GetComponent<Rigidbody>();
             if (Camera.main != null)
             {
@@ -52,28 +56,31 @@ namespace LRS
                 Camera.main.clearFlags = CameraClearFlags.SolidColor;
                 Camera.main.backgroundColor = Color.black;
             }
+
+            initialCameraPos = Camera.main.transform.localPosition;
         }
 
         // Update is called once per frame
         private void Update()
         {
             Rotation();
+            SwayCamera();
         }
-        
+
         #endregion
 
         #region PRIVATE METHODS
-        
+
         private Vector2 GetMouseInput()
         {
             // Get the x and y movement of the mouse and combine it in one variable
-            #if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM
             float mouseX = _look.ReadValue<Vector2>().x;
             float mouseY = _look.ReadValue<Vector2>().y;
-            #else
+#else
             float mouseX = Input.GetAxis(MOUSE_X_AXIS);
             float mouseY = Input.GetAxis(MOUSE_Y_AXIS);
-            #endif
+#endif
             return new Vector2(mouseX, mouseY);
         }
 
@@ -81,7 +88,7 @@ namespace LRS
         {
             // pause movement
             if (pauseCameraMovement) return;
-            
+
             // Y Rotation
             _yRotation += GetMouseInput().x * _sensitivity * Time.deltaTime;
             _rb.rotation = Quaternion.Euler(0f, _yRotation, 0f);
@@ -93,8 +100,22 @@ namespace LRS
             _cam.rotation = Quaternion.Euler(_xRotation, camEulerAngles.y, camEulerAngles.z);
         }
 
+        private void SwayCamera()
+        {
+            if (_rb != null && _rb.velocity.magnitude > 0.1f && playerMovement.IsGrounded())
+            {
+                float swayX = Mathf.Sin(Time.time * swaySpeed) * swayAmount;
+                float swayY = Mathf.Sin(Time.time * swaySpeed * 2) * swayAmount * 0.5f;
+                _cam.localPosition = initialCameraPos + new Vector3(swayX, swayY, 0f);
+            }
+            else
+            {
+                _cam.localPosition = Vector3.Lerp(_cam.localPosition, initialCameraPos, Time.deltaTime * 5f);
+            }
+        }
+
         #endregion
     }
-    
+
 }
 
