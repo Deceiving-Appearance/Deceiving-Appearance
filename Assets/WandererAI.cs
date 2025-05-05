@@ -27,7 +27,7 @@ public class WandererAI : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("Player-test").transform;
         agent = GetComponent<NavMeshAgent>();
         currentAggroRange = baseAggroRange;
     }
