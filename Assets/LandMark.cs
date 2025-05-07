@@ -32,6 +32,7 @@ public class Landmark : MonoBehaviour
     public int revealedDistanceThreshold;
     public LandmarkManager landmarkManager;
     private float _timer;
+    public GameObject playerPos;
 
     // Start is called before the first frame update
     void Start()

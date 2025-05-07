@@ -6205,8 +6205,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5af42e7f54a7d3940aba0438dd672993, type: 2}
+  m_sharedMaterial: {fileID: 3461251586109265133, guid: 5af42e7f54a7d3940aba0438dd672993,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7466,9 +7467,10 @@ MonoBehaviour:
   landmarkNameText: {fileID: 50622125}
   landmarkNameUI_1: {fileID: 1070078118}
   landmarkNameUI_2: {fileID: 275586194}
-  distanceText: {fileID: 449064726}
+  distanceText: {fileID: 1729380567}
   revealedDistanceThreshold: 6
   landmarkManager: {fileID: 1301052248}
+  playerPos: {fileID: 600091897}
 --- !u!1001 &346515600
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9443,7 +9445,7 @@ MonoBehaviour:
   barrelLight: {fileID: 1392626095}
   scanner:
     rayContainer: {fileID: 2056474803}
-    numOfRays: 250
+    numOfRays: 1000
     verticalScanAngle: 30
     horizontalScanAngle: 50
     scanRate: 30
@@ -9702,6 +9704,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1151996859}
+  enemy: {fileID: 583574346}
   pointRenderer: {fileID: 439598913}
 --- !u!114 &439598913
 MonoBehaviour:
@@ -11145,6 +11148,7 @@ MonoBehaviour:
   distanceText: {fileID: 449064726}
   revealedDistanceThreshold: 6
   landmarkManager: {fileID: 1301052248}
+  playerPos: {fileID: 600091897}
 --- !u!43 &451357601
 Mesh:
   m_ObjectHideFlags: 0
@@ -14884,6 +14888,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7910045744218055701, guid: 13b9987d3bc2d764ca46b76fe8c32910,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910045744218055701, guid: 13b9987d3bc2d764ca46b76fe8c32910,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910045744218055701, guid: 13b9987d3bc2d764ca46b76fe8c32910,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910045744218055701, guid: 13b9987d3bc2d764ca46b76fe8c32910,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: -55.6
       objectReference: {fileID: 0}
@@ -15141,6 +15160,12 @@ MonoBehaviour:
   baseAggroRange: 10
   aggroIncreasePerClick: 2
   pauseDuration: 3
+--- !u!4 &583574346 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7910045744218055701, guid: 13b9987d3bc2d764ca46b76fe8c32910,
+    type: 3}
+  m_PrefabInstance: {fileID: 583574337}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &592019140
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19873,9 +19898,10 @@ MonoBehaviour:
   landmarkNameText: {fileID: 1240101135}
   landmarkNameUI_1: {fileID: 1070078118}
   landmarkNameUI_2: {fileID: 275586194}
-  distanceText: {fileID: 449064726}
+  distanceText: {fileID: 1595307133}
   revealedDistanceThreshold: 6
   landmarkManager: {fileID: 1301052248}
+  playerPos: {fileID: 600091897}
 --- !u!1001 &840724549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21724,8 +21750,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: MAP UPDATED
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5af42e7f54a7d3940aba0438dd672993, type: 2}
+  m_sharedMaterial: {fileID: 3461251586109265133, guid: 5af42e7f54a7d3940aba0438dd672993,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -23875,8 +23902,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5af42e7f54a7d3940aba0438dd672993, type: 2}
+  m_sharedMaterial: {fileID: 3461251586109265133, guid: 5af42e7f54a7d3940aba0438dd672993,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -31260,6 +31288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1151996859}
+  enemy: {fileID: 0}
   pointRenderer: {fileID: 1444989947}
 --- !u!4 &1444989949
 Transform:
@@ -33163,6 +33192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1151996859}
+  enemy: {fileID: 0}
   pointRenderer: {fileID: 1532317969}
 --- !u!4 &1532317971
 Transform:
@@ -33810,6 +33840,18 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: ad78f02a9dce779478cab2348a20a608, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &1595307133 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2860321633566224093, guid: 41cccfdbf4862ca4f8a73077f0d12545,
+    type: 3}
+  m_PrefabInstance: {fileID: 828510143}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1595945848
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35388,6 +35430,18 @@ LineRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 828510143}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1729380567 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2860321633566224093, guid: 41cccfdbf4862ca4f8a73077f0d12545,
+    type: 3}
+  m_PrefabInstance: {fileID: 346349095}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1731510923
 Mesh:
   m_ObjectHideFlags: 0
@@ -50897,6 +50951,21 @@ PrefabInstance:
       propertyPath: effectsScript
       value: 
       objectReference: {fileID: 1041777644}
+    - target: {fileID: 5374163645842894011, guid: 452c1547b675dcd4bab673a3f6eabc86,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5374163645842894011, guid: 452c1547b675dcd4bab673a3f6eabc86,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e54f1d9ef043c23478e0daecf1781b76, type: 2}
+    - target: {fileID: 5374163645842894011, guid: 452c1547b675dcd4bab673a3f6eabc86,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 5708741907840894011, guid: 452c1547b675dcd4bab673a3f6eabc86,
         type: 3}
       propertyPath: m_IsActive
