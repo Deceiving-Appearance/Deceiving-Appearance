@@ -9701,6 +9701,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88ee3d7ae34732d4bbac878712505a48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1151996859}
+  pointRenderer: {fileID: 439598913}
 --- !u!114 &439598913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31257,6 +31259,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88ee3d7ae34732d4bbac878712505a48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1151996859}
+  pointRenderer: {fileID: 1444989947}
 --- !u!4 &1444989949
 Transform:
   m_ObjectHideFlags: 0
@@ -33158,6 +33162,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88ee3d7ae34732d4bbac878712505a48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1151996859}
+  pointRenderer: {fileID: 1532317969}
 --- !u!4 &1532317971
 Transform:
   m_ObjectHideFlags: 0
