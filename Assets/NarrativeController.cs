@@ -11,6 +11,8 @@ public class NarrativeController : MonoBehaviour
     public GameObject openingNarrative;
     public GameObject nextToFinalButton;
     public GameObject finalNarrative;
+    public GameObject nextToControlsButton;
+    public GameObject controls;
     public GameObject continueToGameButton;
 
     [Header("Audio")]
@@ -23,6 +25,8 @@ public class NarrativeController : MonoBehaviour
         openingNarrative.SetActive(true);
         nextToFinalButton.SetActive(true);
         finalNarrative.SetActive(false);
+        nextToControlsButton.SetActive(false);
+        controls.SetActive(false);
         continueToGameButton.SetActive(false);
 
         // Play opening narration voice
@@ -38,7 +42,9 @@ public class NarrativeController : MonoBehaviour
         openingNarrative.SetActive(false);
         nextToFinalButton.SetActive(false);
         finalNarrative.SetActive(true);
-        continueToGameButton.SetActive(true);
+        nextToControlsButton.SetActive(true);
+        controls.SetActive(false);
+        continueToGameButton.SetActive(false);
 
         // Play final narration voice
         if (audioSource != null && finalNarrationClip != null)
@@ -47,6 +53,17 @@ public class NarrativeController : MonoBehaviour
             audioSource.clip = finalNarrationClip;
             audioSource.Play();
         }
+    }
+
+    public void ShowControls()
+    {
+        openingNarrative.SetActive(false);
+        nextToFinalButton.SetActive(false);
+        finalNarrative.SetActive(false);
+        continueToGameButton.SetActive(false);
+        controls.SetActive(true);
+        continueToGameButton.SetActive(true);
+        audioSource.Stop();
     }
 
     public void LoadGameScene(string sceneName)
