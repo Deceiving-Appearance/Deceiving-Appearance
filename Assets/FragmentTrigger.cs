@@ -25,6 +25,7 @@ public class FragmentTrigger : MonoBehaviour
         {
             FragmentLogSystem.CollectFragment(fragmentID);
             fragmentPopupImage.gameObject.SetActive(false);
+            gameObject.SetActive(false);  // Hide the cube after collection
         }
     }
 }
