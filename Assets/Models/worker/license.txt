@@ -1,0 +1,11 @@
+Model Information:
+* title:	Boneworks - Omni Worker
+* source:	https://sketchfab.com/3d-models/boneworks-omni-worker-0e790422d1384a528c9d0537e60e663c
+* author:	RussianAstolfo (https://sketchfab.com/RussianAstolfo)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Boneworks - Omni Worker" (https://sketchfab.com/3d-models/boneworks-omni-worker-0e790422d1384a528c9d0537e60e663c) by RussianAstolfo (https://sketchfab.com/RussianAstolfo) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

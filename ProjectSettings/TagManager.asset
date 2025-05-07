@@ -9,6 +9,8 @@ TagManager:
   - Red
   - Yellow
   - Green
+  - IDCard
+  - LockedDoor
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - PointReject
   - InvisibleGeometry2
   - PlayerIndicator
-  - 
+  - GreenPoints
   - 
   - 
   - 
