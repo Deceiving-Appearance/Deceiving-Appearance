@@ -8,13 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Game/Scenes/MenuScene.unity
     guid: 3e918f1a095abbf4fb30a94364c3fe33
-  - enabled: 1
-    path: Assets/_Game/Scenes/SilviaScene.unity
-    guid: 2ecdcbf7f1c06124e8db8646b0597b2e
   - enabled: 0
     path: Assets/OutdoorsScene.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
   - enabled: 1
     path: Assets/_Game/Scenes/IntroScene.unity
     guid: 09947a24f6be3ff419531fc1c1a345e3
+  - enabled: 1
+    path: Assets/_Game/Scenes/SilviaScene.unity
+    guid: 2ecdcbf7f1c06124e8db8646b0597b2e
   m_configObjects: {}
